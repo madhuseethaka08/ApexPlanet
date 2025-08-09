@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Restaurant Menu Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#ffffff; --accent:#ff6b6b; --muted:#6b7280;
+    --radius:12px; --maxw:1100px;
+  }
+  *{box-sizing:border-box;font-family:Inter, system-ui, sans-serif}
+  body{
+    margin:0;background:linear-gradient(180deg,#fbfdff,#f6f8fb);
+    color:#111827; display:flex; justify-content:center; padding:30px 16px;
+  }
+  .wrap{width:100%;max-width:var(--maxw);}
+  header{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+  }
+  .brand{
+    display:flex;gap:14px;align-items:center;
+  }
+  .logo{
+    width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#ff9a9e);
+    display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:20px;box-shadow:0 6px 18px rgba(16,24,40,0.08);
+  }
+  h1{margin:0;font-size:20px}
+  p.lead{margin:0;color:var(--muted);font-size:14px}
+  .controls{display:flex;gap:10px;align-items:center}
+  .search{padding:8px 12px;border-radius:999px;border:1px solid #e6e9ef;background:#fff;min-width:220px}
+  .btn {background:var(--accent);color:#fff;padding:8px 12px;border-radius:10px;border:none;cursor:pointer}
+  main{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+
+  /* Menu column */
+  .menu {background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 6px 18px rgba(16,24,40,0.06)}
+  .category{margin-bottom:18px}
+  .category h2{margin:0 0 8px 0;font-size:18px;color:#0f172a}
+  .items{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .item{
+    background:#fff;border-radius:10px;padding:10px;border:1px solid #eef2f7;display:flex;gap:10px;align-items:center;
+  }
+  .item img{width:72px;height:72px;border-radius:8px;object-fit:cover;flex-shrink:0}
+  .meta{flex:1}
+  .meta h3{margin:0;font-size:15px}
+  .meta p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
+  .price-add{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+  .price{font-weight:700;color:#0f172a}
+  .small{font-size:12px;color:var(--muted)}
+
+  /* Cart column */
+  .cart{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 6px 18px rgba(16,24,40,0.06);}
+  .cart h2{margin:0 0 12px 0}
+  .cart-list{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow:auto;padding-right:6px}
+  .cart-item{display:flex;justify-content:space-between;gap:10px;background:#fbfdff;padding:8px;border-radius:10px;border:1px solid #eef2f7}
+  .cart-item .left{display:flex;gap:10px;align-items:center}
+  .qty-controls{display:flex;gap:6px;align-items:center}
+  .qty-controls button{width:28px;height:28px;border-radius:6px;border:1px solid #e6e9ef;background:#fff;cursor:pointer}
+  .total{display:flex;justify-content:space-between;margin-top:16px;font-weight:700;font-size:18px}
+  .checkout{margin-top:12px;display:flex;gap:8px}
+  .empty{color:var(--muted);font-size:14px;text-align:center;padding:20px 0}
+
+  /* Responsive */
+  @media (max-width:900px){
+    main{grid-template-columns:1fr;}
+    .cart{order:2;margin-top:14px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">RP</div>
+        <div>
+          <h1>Ruchi Palace</h1>
+          <p class="lead">Authentic flavors • Freshly prepared • Open 10AM - 10PM</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input id="search" class="search" placeholder="Search dishes or ingredients..." />
+        <button onclick="printMenu()" class="btn">Print Menu</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Menu -->
+      <section class="menu" id="menu">
+        <!-- Category: Starters -->
+        <div class="category" data-category="Starters">
+          <h2>Starters</h2>
+          <div class="items">
+            <div class="item" data-name="Paneer Tikka" data-price="180">
+              <img src="https://orders.popskitchen.in/storage/2024/09/image-358.png" alt="Paneer Tikka">
+              <div class="meta">
+                <h3>Paneer Tikka</h3>
+                <p>Succulent paneer cubes marinated & grilled.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹180</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-name="Veg Spring Roll" data-price="120">
+              <img src="https://t3.ftcdn.net/jpg/00/89/95/08/360_F_89950874_LVsh6xkVvHEPZUqH60qZRkUq5VNfsba3.jpg" alt="Spring Roll">
+              <div class="meta">
+                <h3>Veg Spring Roll</h3>
+                <p>Crispy rolls stuffed with seasoned veggies.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹120</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-name="Chicken 65" data-price="210">
+              <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2022/03/chicken-65-swasthi.jpg" alt="Chicken 65">
+              <div class="meta">
+                <h3>Chicken 65</h3>
+                <p>Deep fried spicy chicken bites.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹210</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: Main Course -->
+        <div class="category" data-category="Main Course">
+          <h2>Main Course</h2>
+          <div class="items">
+            <div class="item" data-name="Paneer Butter Masala" data-price="220">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4meDxOJmR8Fl4JTMa7eJy9CPzotJaR_1RKw&s" alt="Paneer Butter">
+              <div class="meta">
+                <h3>Paneer Butter Masala</h3>
+                <p>Rich tomato gravy with soft paneer cubes.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹220</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-name="Veg Biryani" data-price="190">
+              <img src="https://www.indianhealthyrecipes.com/wp-content/uploads/2021/09/veg-biryani-vegetable-biryani.jpg" alt="Veg Biryani">
+              <div class="meta">
+                <h3>Veg Biryani</h3>
+                <p>Fragrant basmati rice with mixed vegetables.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹190</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-name="Chicken Biryani" data-price="260">
+              <img src="https://www.shutterstock.com/image-photo/hyderabadi-chicken-biryani-aromatic-flavorful-260nw-2497040151.jpg" alt="Chicken Biryani">
+              <div class="meta">
+                <h3>Chicken Biryani</h3>
+                <p>Classic Dum biryani with tender chicken pieces.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹260</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category: Desserts -->
+        <div class="category" data-category="Desserts">
+          <h2>Desserts</h2>
+          <div class="items">
+            <div class="item" data-name="Gulab Jamun" data-price="90">
+              <img src="https://i0.wp.com/www.chitrasfoodbook.com/wp-content/uploads/2016/10/gulab-jamun-using-mix.jpg?w=1200&ssl=1" alt="Gulab Jamun">
+              <div class="meta">
+                <h3>Gulab Jamun</h3>
+                <p>Soft milk dumplings soaked in sugar syrup.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹90</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+
+            <div class="item" data-name="Ice Cream Scoop" data-price="70">
+              <img src="https://www.hitkari.co.in/cdn/shop/products/ice_800x.jpg?v=1656676747" alt="Ice Cream">
+              <div class="meta">
+                <h3>Ice Cream Scoop</h3>
+                <p>Creamy vanilla/double chocolate scoop.</p>
+              </div>
+              <div class="price-add">
+                <div class="price">₹70</div>
+                <button class="btn" onclick="addToCart(event)">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Cart -->
+      <aside class="cart" id="cart">
+        <h2>Your Order</h2>
+        <div class="cart-list" id="cartList">
+          <div class="empty">No items added yet. Click "Add" to include dishes.</div>
+        </div>
+        <div class="total">
+          <div>Total</div>
+          <div id="totalAmt">₹0</div>
+        </div>
+        <div class="checkout">
+          <button class="btn" onclick="checkout()">Checkout</button>
+          <button onclick="clearCart()" style="background:#6b7280;color:#fff;border-radius:10px;padding:8px 10px;border:none;cursor:pointer">Clear</button>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+<script>
+  const cart = {}; // key: name, value: {price, qty}
+  const cartList = document.getElementById('cartList');
+  const totalAmt = document.getElementById('totalAmt');
+  const search = document.getElementById('search');
+
+  function addToCart(e){
+    const itemEl = e.target.closest('.item');
+    const name = itemEl.dataset.name;
+    const price = Number(itemEl.dataset.price);
+    if(cart[name]) cart[name].qty += 1;
+    else cart[name] = { price, qty: 1 };
+    renderCart();
+  }
+
+  function renderCart(){
+    cartList.innerHTML = '';
+    const keys = Object.keys(cart);
+    if(keys.length === 0){
+      cartList.innerHTML = '<div class="empty">No items added yet. Click "Add" to include dishes.</div>';
+      totalAmt.innerText = '₹0';
+      return;
+    }
+    let total = 0;
+    keys.forEach(name => {
+      const {price, qty} = cart[name];
+      total += price*qty;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <div class="left">
+          <div><strong>${name}</strong></div>
+          <div class="small">₹${price} each</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="qty-controls">
+            <button onclick="changeQty('${name}', -1)">-</button>
+            <span style="padding:0 8px">${qty}</span>
+            <button onclick="changeQty('${name}', 1)">+</button>
+          </div>
+          <div style="min-width:60px;text-align:right">₹${price*qty}</div>
+          <button onclick="removeItem('${name}')" style="background:#fff;border:1px solid #f1f5f9;padding:6px;border-radius:8px;cursor:pointer">✕</button>
+        </div>
+      `;
+      cartList.appendChild(div);
+    });
+    totalAmt.innerText = `₹${total}`;
+  }
+
+  function changeQty(name, delta){
+    if(!cart[name]) return;
+    cart[name].qty += delta;
+    if(cart[name].qty <= 0) delete cart[name];
+    renderCart();
+  }
+
+  function removeItem(name){
+    delete cart[name];
+    renderCart();
+  }
+
+  function clearCart(){
+    for(let k in cart) delete cart[k];
+    renderCart();
+  }
+
+  function checkout(){
+    const keys = Object.keys(cart);
+    if(keys.length === 0){
+      alert('Your cart is empty!');
+      return;
+    }
+    let receipt = 'Order Summary:\\n\\n';
+    let total = 0;
+    keys.forEach(name => {
+      const p = cart[name].price*cart[name].qty;
+      receipt += `${name} x${cart[name].qty} = ₹${p}\\n`;
+      total += p;
+    });
+    receipt += `\\nTotal = ₹${total}\\n\\nThank you for your order!`;
+    alert(receipt);
+    // After checkout clear cart
+    clearCart();
+  }
+
+  function printMenu(){
+    window.print();
+  }
+
+  // Search filter
+  search.addEventListener('input', (ev) => {
+    const q = ev.target.value.trim().toLowerCase();
+    document.querySelectorAll('.item').forEach(it => {
+      const name = it.dataset.name.toLowerCase();
+      const desc = it.querySelector('.meta p').innerText.toLowerCase();
+      it.style.display = (name.includes(q) || desc.includes(q)) ? 'flex' : 'none';
+    });
+  });
+
+  // initial render
+  renderCart();
+</script>
+</body>
+</html>
