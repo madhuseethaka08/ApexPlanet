@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex planet task 2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+
+    header {
+      background: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    /* Responsive Layout */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    @media(max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Contact Form */
+    .contact-form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .contact-form h2 {
+      margin-bottom: 15px;
+    }
+
+    .contact-form input, .contact-form button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .contact-form button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .contact-form button:hover {
+      background: #45a049;
+    }
+
+    /* To-Do List */
+    .todo {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .todo input {
+      width: 75%;
+      padding: 10px;
+      margin-right: 5px;
+    }
+
+    .todo button {
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .todo ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .todo ul li {
+      padding: 8px;
+      margin: 5px 0;
+      background: #eee;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Image Gallery */
+    .gallery {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .gallery-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .gallery-grid img {
+      width: calc(33.333% - 10px);
+      border-radius: 5px;
+    }
+
+    @media(max-width: 600px) {
+      .gallery-grid img {
+        width: calc(50% - 10px);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MY MINI PROJECT</h1>
+  </header>
+
+  <div class="container">
+    
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <h2>Contact Form</h2>
+      <form id="contactForm">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <input type="date" id="dob" required>
+        <button type="submit">Submit</button>
+      </form>
+      <p id="formMsg" style="color:green;"></p>
+    </div>
+
+    <!-- To-Do List -->
+    <div class="todo">
+      <h2>To-Do List</h2>
+      <input type="text" id="todoInput" placeholder="Enter a task">
+      <button onclick="addTask()">Add</button>
+      <ul id="todoList"></ul>
+    </div>
+
+    <!-- Image Gallery -->
+    <div class="gallery">
+      <h2>Image Gallery</h2>
+      <div class="gallery-grid">
+        <img src="https://picsum.photos/200/200?random=1" alt="">
+        <img src="https://picsum.photos/200/200?random=2" alt="">
+        <img src="https://picsum.photos/200/200?random=3" alt="">
+        <img src="https://picsum.photos/200/200?random=4" alt="">
+        <img src="https://picsum.photos/200/200?random=5" alt="">
+        <img src="https://picsum.photos/200/200?random=6" alt="">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Form Validation
+    document.getElementById("contactForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      let name = document.getElementById("name").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let dob = document.getElementById("dob").value;
+      let msg = document.getElementById("formMsg");
+
+      if(name === "" || email === "" || dob === ""){
+        msg.style.color = "red";
+        msg.textContent = "All fields are required!";
+      } else if(!/\S+@\S+\.\S+/.test(email)){
+        msg.style.color = "red";
+        msg.textContent = "Invalid email format!";
+      } else {
+        msg.style.color = "green";
+        msg.textContent = "Form submitted successfully!";
+        document.getElementById("contactForm").reset();
+      }
+    });
+
+    // To-Do List
+    function addTask(){
+      let input = document.getElementById("todoInput");
+      let task = input.value.trim();
+      if(task !== ""){
+        let li = document.createElement("li");
+        li.innerHTML = task + " <button onclick='removeTask(this)'>X</button>";
+        document.getElementById("todoList").appendChild(li);
+        input.value = "";
+      }
+    }
+
+    function removeTask(btn){
+      btn.parentElement.remove();
+    }
+  </script>
+</body>
+</html>
