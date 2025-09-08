@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDo List Application</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600&family=Quicksand:wght@400;600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #ffe29f, #ffa99f, #ff719a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      border-radius: 15px;
+      width: 100%;
+      max-width: 1200px;
+      color: #fff;
+    }
+
+    .navbar .app-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    .navbar button {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+      width: 120px;
+      margin-bottom: 5px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .navbar button:hover {
+      background: #fff;
+      color: #2575fc;
+      transform: scale(1.05);
+    }
+
+    .main-head {
+      color: #ffffff;
+      font-family: 'Baloo 2', cursive;
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      margin: 10px 0 30px 0;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .input-section,
+    .tasks-section {
+      width: 47%;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      transition: transform 0.2s;
+    }
+
+    .input-section:hover,
+    .tasks-section:hover {
+      transform: translateY(-3px);
+    }
+
+    .input-section h2,
+    .tasks-section h2 {
+      margin-bottom: 15px;
+      color: #444;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+    }
+
+    input,
+    textarea {
+      width: 95%;
+      margin-bottom: 12px;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 12px;
+      font-size: 15px;
+      transition: 0.3s;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #2575fc;
+      outline: none;
+      box-shadow: 0 0 6px rgba(37, 117, 252, 0.3);
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #ff9966, #ff5e62);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .add-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #ff5e62, #ff9966);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(48%, 1fr));
+      gap: 15px;
+    }
+
+    li {
+      position: relative;
+      background: linear-gradient(135deg, #d9a7c7, #fffcdc);
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.3s;
+      cursor: pointer;
+      height: 140px;
+      box-sizing: border-box;
+      border-left: 5px solid #6a11cb;
+    }
+
+    li:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    li.completed {
+      background: #e0e0e0;
+      text-decoration: line-through;
+    }
+
+    li .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    li .task-content {
+      font-size: 14px;
+      color: #333;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
+
+    li strong {
+      font-family: 'Baloo 2', cursive;
+      font-size: 18px;
+      color: #222;
+    }
+
+    li .delete-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #ff5e62;
+      transition: transform 0.2s, color 0.3s;
+    }
+
+    li .delete-btn:hover {
+      color: #ff1e40;
+      transform: scale(1.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="app-brand">
+      <i class="fa-solid fa-clipboard-check"></i>
+      MyTasks
+    </div>
+    <div class="nav-buttons">
+      <button onclick="filterTasks('all')"><i class="fa-solid fa-list"></i> All</button>
+      <button onclick="filterTasks('completed')"><i class="fa-solid fa-check-circle"></i> Completed</button>
+      <button onclick="filterTasks('incomplete')"><i class="fa-solid fa-circle-xmark"></i> Incomplete</button>
+    </div>
+  </div>
+
+  <h1 class="main-head">✨ Task Tracker ✨</h1>
+
+  <div class="container">
+    <div class="input-section">
+      <h2>Add New Task</h2>
+      <input type="text" id="taskTitle" placeholder="Task Title" required>
+      <textarea id="taskDescription" placeholder="Task Description" rows="8" required></textarea>
+      <button class="add-btn" onclick="addTask()">Add Task</button>
+    </div>
+
+    <div class="tasks-section">
+      <h2>Tasks List</h2>
+      <ul id="tasksList"></ul>
+    </div>
+  </div>
+
+  <script>
+    function loadTasks(filter = 'all') {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      const tasksList = document.getElementById('tasksList');
+      tasksList.innerHTML = '';
+      tasks
+        .filter(task => {
+          if (filter === 'completed') return task.completed;
+          if (filter === 'incomplete') return !task.completed;
+          return true;
+        })
+        .forEach((task, index) => {
+          const li = document.createElement('li');
+          li.className = task.completed ? 'completed' : '';
+          li.onclick = (e) => {
+            if (e.target.type !== 'button' && e.target.type !== 'checkbox' && !e.target.classList.contains('fa-solid')) {
+              toggleTask(index);
+            }
+          };
+          li.innerHTML = `
+            <div class="task-header">
+              <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})">
+              <button class="delete-btn" onclick="deleteTask(${index})"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="task-content">
+              <strong>${task.title}</strong><br><br>
+              ${task.description}
+            </div>
+          `;
+          tasksList.appendChild(li);
+        });
+    }
+
+    function addTask() {
+      const title = document.getElementById('taskTitle').value.trim();
+      const description = document.getElementById('taskDescription').value.trim();
+      if (!title || !description) {
+        alert('Please enter both title and description.');
+        return;
+      }
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.push({ title, description, completed: false });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      document.getElementById('taskTitle').value = '';
+      document.getElementById('taskDescription').value = '';
+      loadTasks();
+    }
+
+    function deleteTask(index) {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.splice(index, 1);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      loadTasks();
+    }
+
+    function toggleTask(index) {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks[index].completed = !tasks[index].completed;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      loadTasks();
+    }
+
+    function filterTasks(filter) {
+      loadTasks(filter);
+    }
+
+    window.onload = () => loadTasks();
+  </script>
+</body>
+</html>
